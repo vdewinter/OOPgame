@@ -19,6 +19,10 @@ class Rock(GameElement):
     IMAGE = "Rock"
     SOLID = True
 
+class Wall(GameElement):
+    IMAGE = "Wall"
+    SOLID = True
+
 class Gem(GameElement):
     SOLID = False   
 
@@ -81,9 +85,6 @@ class Character(GameElement):
             return (self.x+1, self.y)
         return None
 
-# class Computer(Character):
-#     IMAGE = "Horns"
-
 class Door(GameElement):
     IMAGE = "DoorClosed"
     SOLID = True
@@ -127,8 +128,8 @@ class CatTreat(GameElement):
         player.inventory.append("Cat_Treat")
         GAME_BOARD.draw_msg("You just acquired a cat treat!")
 
-class Cat(GameElement):
-    IMAGE = "Cat"
+class CuteCat(GameElement):
+    IMAGE = "CuteCat"
     SOLID = True
 
     def interact(self, player):
@@ -174,26 +175,31 @@ def initialize():
         (7,6),
         (7,7),
         (7,8),
-        (8,1)
+        (8,1),
+        (4,8)
     ]
-    rocks = []
+    wall_positions = [
+        (0,8),
+        (0,7)
+    ]
 
     #Rocks
     for pos in rock_positions:
         rock = Rock()
         GAME_BOARD.register(rock)
         GAME_BOARD.set_el(pos[1], pos[0], rock)
-        rocks.append(rock)
+
+    #Wall
+    for pos in wall_positions:
+        wall = Wall()
+        GAME_BOARD.register(wall)
+        GAME_BOARD.set_el(pos[1], pos[0], wall)
 
     global PLAYER
     PLAYER = Character()
-    # COMPUTER = Computer()
     GAME_BOARD.register(PLAYER)
     GAME_BOARD.set_el(0, 8, PLAYER)
     print PLAYER
-    # GAME_BOARD.register(COMPUTER)
-    # GAME_BOARD.set_el(8, 7, COMPUTER)
-    # print COMPUTER
 
     #Message from Sponsors
     GAME_BOARD.draw_msg("Goal: get the star.")
@@ -243,9 +249,9 @@ def initialize():
     GAME_BOARD.set_el(3, 4, princess)
 
     #Cat
-    cat = Cat()
-    GAME_BOARD.register(cat)
-    GAME_BOARD.set_el(5, 5, cat)
+    cute_cat = CuteCat()
+    GAME_BOARD.register(cute_cat)
+    GAME_BOARD.set_el(5, 5, cute_cat)
 
     #Prize
     star = Star()
