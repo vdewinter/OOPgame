@@ -9,6 +9,8 @@ GAME_BOARD = None
 DEBUG = False
 KEYBOARD = None
 PLAYER = None
+Round = 1
+
 ######################
 
 GAME_WIDTH = 9
@@ -64,7 +66,9 @@ class Star(GameElement):
 
     def interact(self, player):
         player.inventory.append("Star")
-        GAME_BOARD.draw_msg("You got the Star! You have won the game!")        
+        GAME_BOARD.draw_msg("You got the Star! You have won the game!")
+        increase_round(Round)
+        initialize2()       
 
 class Character(GameElement):
     IMAGE = "Girl"
@@ -84,6 +88,10 @@ class Character(GameElement):
         elif direction == "right":
             return (self.x+1, self.y)
         return None
+
+class Computer(GameElement):
+    IMAGE = "Horns"
+    SOLID = True
 
 class Door(GameElement):
     IMAGE = "DoorClosed"
@@ -138,7 +146,6 @@ class CuteCat(GameElement):
             GAME_BOARD.draw_msg("You have given the kitten a treat! Now it will let you through")
 
 ####   End class definitions    ####
-
 
 def initialize():
     """Put game initialization code here"""
@@ -284,5 +291,57 @@ def keyboard_handler():
             GAME_BOARD.del_el(PLAYER.x, PLAYER.y)
             GAME_BOARD.set_el(next_x, next_y, PLAYER)
 
+def increase_round(Round):
+    new_round = Round + 1
+    for x in range(GAME_WIDTH):
+        for y in range(GAME_HEIGHT):
+            GAME_BOARD.del_el(x,y)
+    return new_round
 
+def initialize2():
+    star_pos = [
+        (0,0),
+        (0,1),
+        (0,2),
+        (1,0),
+        (1,4),
+        (2,0),
+        (2,2),
+        (2,4),
+        (2,6),
+        (2,7),
+        (3,2),
+        (3,4),
+        (3,7),
+        (4,1),
+        (4,2),
+        (4,4),
+        (4,5),
+        (4,6),
+        (4,7),
+        (5,1),
+        (6,1),
+        (6,3),
+        (6,5),
+        (6,7),
+        (7,1),
+        (7,2),
+        (7,3),
+        (7,5),
+        (7,6),
+        (7,7),
+        (7,8),
+        (8,1),
+        (4,8)
+    ]
 
+    for pos in star_pos:
+        star = Star()
+        GAME_BOARD.register(star)
+        GAME_BOARD.set_el(pos[1], pos[0], star)
+
+    global COMPUTER
+    COMPUTER = Computer()
+    GAME_BOARD.register(COMPUTER)
+    GAME_BOARD.set_el(8,0, COMPUTER)
+    GAME_BOARD.draw_msg("Congratulations.")
